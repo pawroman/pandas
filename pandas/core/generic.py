@@ -3757,10 +3757,12 @@ it is assumed to be aliases for the column names.')
             elif self.ndim == 3:
 
                 # fill in 2d chunks
-                result = dict([(col, s.fillna(method=method, value=value))
-                               for col, s in self.iteritems()])
-                new_obj = self._constructor.\
-                    from_dict(result).__finalize__(self)
+                result = {col: s.fillna(method=method, value=value,
+                                        limit=limit)
+                          for col, s in self.iteritems()}
+
+                new_obj = (self._constructor
+                           .from_dict(result).__finalize__(self))
                 new_data = new_obj._data
 
             else:
